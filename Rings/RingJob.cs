@@ -10,13 +10,13 @@ namespace Rings
 {
     public class RingJob : IJob
     {
-        readonly static string PATH = Path.Combine(Directory.GetCurrentDirectory(), "ring.wav");
         public Task Execute(IJobExecutionContext context)
         {
             return Task.Factory.StartNew(() =>
             {
-                Console.WriteLine("打铃: {0}", DateTime.Now.ToString());
-                new SoundPlayer(PATH).Play();
+                var file = context.JobDetail.JobDataMap.GetString("file");
+                Console.WriteLine(DateTime.Now.ToString() + $" 执行打铃 {file}");
+                new SoundPlayer(Path.Combine(Directory.GetCurrentDirectory(), $"{file}.wav")).Play();
         });
         }
     }
